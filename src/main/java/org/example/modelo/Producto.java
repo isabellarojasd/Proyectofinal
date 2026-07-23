@@ -7,7 +7,7 @@ import lombok.*;
 public class Producto {
     private String nombre;
     private String descripcion;
-    private String precio;
+    private int precio;
     private int cantidadDisponible;
     private int id;
 
