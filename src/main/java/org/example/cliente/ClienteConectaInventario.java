@@ -1,5 +1,6 @@
 package org.example.cliente;
 
+import org.example.configuracon.ConfiApp;
 import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
 
@@ -22,6 +23,7 @@ public class ClienteConectaInventario {
      * @param puerto puerto en el que escucha el servidor
      */
     public ClienteConectaInventario(String host, int puerto) {
+        ConfiApp.cargarConfiSSLEstatico();;
         this.host = host;
         this.puerto = puerto;
     }
@@ -35,7 +37,7 @@ public class ClienteConectaInventario {
      * @throws IOException si ocurre un error de conexión o comunicación.
      */
     public Respuesta enviarPeticion(Peticion peticion) throws IOException {
-        try (Socket socket = new Socket(host, puerto)) {
+        try (Socket socket = javax.net.ssl.SSLSocketFactory.getDefault().createSocket(host, puerto)) {
             ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream());
             salida.flush();
             ObjectInputStream entrada = new ObjectInputStream(socket.getInputStream());
