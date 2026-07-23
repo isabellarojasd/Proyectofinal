@@ -41,30 +41,42 @@ public class Inventario {
             throw new ProductoNoEncontradoException("No existe el producto con el id: " + id + "Intentelo de nuevo");
 
         }   }
-    public void editarProducto(int id, String nombre, String descripcion, double precio, int cantidadDisponible){
-            List <Producto> resultado = productos.stream()
-                    .filter(producto -> producto.getId()== id)
-                    .toList();
-            if (resultado.isEmpty()) {
-                throw new ProductoNoEncontradoException("No existe un producto con ese id");
-            }
-
-            if (nombre == null || nombre.isEmpty()) {
-                throw new DatoInvalidoException("Este campo no puede estar vacío");
-            }
-            if (precio < 0) {
-                throw new DatoInvalidoException("El precio no puede ser negativo");
-            }
-            if (cantidadDisponible < 0) {
-                throw new DatoInvalidoException("La cantidad no puede ser negativa");
-            }
-
-            Producto encontrado = resultado.get(0);
-            encontrado.setNombre(nombre);
-            encontrado.setDescripcion(descripcion);
-            encontrado.setPrecio(precio);
-            encontrado.setCantidadDisponible(cantidadDisponible);
+    public void editarProducto(int id, String nombre, String descripcion, double precio, int cantidadDisponible) {
+        List<Producto> resultado = productos.stream()
+                .filter(producto -> producto.getId() == id)
+                .toList();
+        if (resultado.isEmpty()) {
+            throw new ProductoNoEncontradoException("No existe un producto con ese id");
         }
+
+        if (nombre == null || nombre.isEmpty()) {
+            throw new DatoInvalidoException("Este campo no puede estar vacío");
+        }
+        if (precio < 0) {
+            throw new DatoInvalidoException("El precio no puede ser negativo");
+        }
+        if (cantidadDisponible < 0) {
+            throw new DatoInvalidoException("La cantidad no puede ser negativa");
+        }
+        if (productos.stream().anyMatch(p -> p.getNombre().equals(nombre) && p.getId() != id)) {
+            throw new DatoInvalidoException("Ya existe un producto con ese nombre");
+        }
+
+        Producto encontrado = resultado.get(0);
+        encontrado.setNombre(nombre);
+        encontrado.setDescripcion(descripcion);
+        encontrado.setPrecio(precio);
+        encontrado.setCantidadDisponible(cantidadDisponible);
+    }
+    public List<Producto> buscarProductoPorNombre(String nombre) {
+        return productos.stream()
+                .filter(p -> p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                .toList();
+
+    }
+    public List<Producto> listarTodos (){
+        return new ArrayList<>(productos);
+    }
 
 
 
