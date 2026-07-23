@@ -1,4 +1,9 @@
 package org.example.protocolo;
 
-public class TipoOperacion {
+public enum TipoOperacion {
+    AGREGAR,
+    ELIMINAR,
+    ACTUALIZAR,
+    BUSCAR,
+    LISTAR
 }
