@@ -2,7 +2,7 @@ package org.example.auditoria;
 
 /**
  * Define el contrato para registrar auditorías de las operaciones
- * realizadas sobre el inventario.
+ * realizadas sobre el inventario
  */
 public interface IAuditor {
 
