@@ -1,11 +1,14 @@
 package org.example.presentacion;
 
 import org.example.cliente.ServicioCliente;
+import org.example.exportar.ExportarInventarioCSV;
+import org.example.exportar.IExportarInventario;
 import org.example.modelo.Producto;
 import org.example.protocolo.Respuesta;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -60,6 +63,9 @@ public class ManejoInventario extends VentaBase implements INavegación {
      * Registra los eventos de clic en los botones de la interfaz.
      */
     private void inicializarEventos() {
+        if (btnExportarCSV != null) {
+            btnExportarCSV.addActionListener(e -> accionExportarCSV());
+        }
         if (btnBuscar != null) {
             btnBuscar.addActionListener(e -> accionBuscar());
         }
@@ -74,6 +80,49 @@ public class ManejoInventario extends VentaBase implements INavegación {
     /**
      * Estas son las acciones de los botones
      */
+
+    private void accionExportarCSV() {
+        try {
+            // 1. Pedimos los productos actualizados al servidor
+            Respuesta respuesta = servicioCliente.listarInventario();
+
+            if (respuesta == null || !respuesta.isExito() || respuesta.getProductos() == null || respuesta.getProductos().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay productos disponibles en el inventario para exportar.", "Sin datos", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // 2. Abrimos el selector de archivos (JFileChooser)
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar Inventario en CSV");
+            fileChooser.setSelectedFile(new File("inventario_exportado.csv"));
+
+            int userSelection = fileChooser.showSaveDialog(this);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File archivoGuardar = fileChooser.getSelectedFile();
+                String ruta = archivoGuardar.getAbsolutePath();
+
+                // Aseguramos la extensión .csv
+                if (!ruta.toLowerCase().endsWith(".csv")) {
+                    ruta += ".csv";
+                }
+
+                // 3. Exportamos utilizando tu clase ExportarInventarioCSV
+                IExportarInventario exportador = new ExportarInventarioCSV();
+                exportador.exportar(respuesta.getProductos(), ruta);
+
+                JOptionPane.showMessageDialog(this,
+                        "¡Inventario exportado exitosamente!\nUbicación: " + ruta,
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error de red/SSL al obtener inventario: " + e.getMessage(), "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al generar el archivo CSV: " + e.getMessage(), "Error de Exportación", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void accionBuscar() {
         String criterio = txtBusqueda != null ? txtBusqueda.getText().trim() : "";
@@ -175,29 +224,60 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
-    // --- MÉTODOS OBLIGATORIOS IMPLEMENTADOS ---
+    /**
+     * Métodos obligatorios de la interfaz INavegación
+     */
 
+    /**
+     * Obtiene el panel principal de la ventana
+     *
+     * @return panel principal del inventario
+     */
     @Override
     public JPanel getPanelPrincipal() {
         return this.panelInventario;
     }
 
+    /**
+     * Abre la ventana del inventario
+     */
     @Override
     public void abrir() {
         this.setVisible(true);
     }
 
+    /**
+     * Cierra la ventana del inventario
+     */
     @Override
     public void cerrar() {
         this.dispose();
     }
 
+    /**
+     * Limpia los campos del formulario
+     */
     @Override
     public void limpiarFormulario() {
-        if (txtBusqueda != null) txtBusqueda.setText("");
-        if (txtNombre != null) txtNombre.setText("");
-        if (txtDescrpcion != null) txtDescrpcion.setText("");
-        if (txtPrecio != null) txtPrecio.setText("");
-        if (txtStock != null) txtStock.setText("");
+
+        if (txtBusqueda != null) {
+            txtBusqueda.setText("");
+        }
+
+        if (txtNombre != null) {
+            txtNombre.setText("");
+        }
+
+        if (txtDescrpcion != null) {
+            txtDescrpcion.setText("");
+        }
+
+        if (txtPrecio != null) {
+            txtPrecio.setText("");
+        }
+
+        if (txtStock != null) {
+            txtStock.setText("");
+        }
     }
 }

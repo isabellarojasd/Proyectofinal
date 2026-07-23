@@ -12,10 +12,11 @@ import java.lang.classfile.instruction.SwitchCase;
 public class DespachadorPeticion {
     private Inventario inventario;
 
-    public DespachadorPeticion(Inventario inventario){
+    public DespachadorPeticion(Inventario inventario) {
         this.inventario = inventario;
     }
-    public Respuesta procesar (Peticion peticion) {
+
+    public Respuesta procesar(Peticion peticion) {
         switch (peticion.getTipo()) {
             case AGREGAR:
                 try {
@@ -35,7 +36,7 @@ public class DespachadorPeticion {
                     return new Respuesta(false, "El id proporcionado no es válido", null);
                 }
         }
+        return null;
     }
 
-    return null;
 }
