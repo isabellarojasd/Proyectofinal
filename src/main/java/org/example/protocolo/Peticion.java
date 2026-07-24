@@ -1,26 +1,26 @@
 package org.example.protocolo;
-
+import java.io.Serializable;
+import org.example.modelo.Producto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.modelo.Producto;
 
-import java.io.Serializable;
+@Data
+    @AllArgsConstructor
+    @NoArgsConstructor
 
 /**
  * Representa una petición enviada desde el cliente hacia el servidor,
  * indicando la operación a realizar y los datos necesarios para ejecutarla.
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class Peticion implements Serializable {
 
     /**
      * Tipo de operación que se desea ejecutar (agregar, eliminar, actualizar, buscar, listar).
      */
-    private TipoOperacion tipo;
 
+    private TipoOperacion tipo;
     /**
      * Producto involucrado en la operación (usado en AGREGAR y ACTUALIZAR).
      * Puede ser null si la operación no lo requiere.

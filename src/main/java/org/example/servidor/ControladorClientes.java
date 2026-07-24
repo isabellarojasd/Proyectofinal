@@ -1,4 +1,14 @@
 package org.example.servidor;
 
-public class ControladorClientes {
+import java.net.Socket;
+
+public class ControladorClientes implements Runnable{
+
+    private Socket socket;
+    private DespachadorPeticion peticion;
+
+    @Override
+    public void run() {
+
+    }
 }
