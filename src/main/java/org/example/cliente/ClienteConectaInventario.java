@@ -1,8 +1,10 @@
 package org.example.cliente;
 
-import org.example.configuracon.ConfiApp;
 import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
+import org.example.configuracon.ISSLConfig;
+import org.example.configuracon.SSLConfig;
+import org.example.configuracon.PropertiesManager;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,8 +25,11 @@ public class ClienteConectaInventario {
      * @param puerto puerto en el que escucha el servidor
      */
     public ClienteConectaInventario(String host, int puerto) {
-        ConfiApp.cargarConfiSSLEstatico();;
-        this.host = host;
+        ISSLConfig sslConfig = new SSLConfig(new PropertiesManager("config.properties"));
+        System.setProperty("javax.net.ssl.keyStore", sslConfig.getKeyStorePath());
+        System.setProperty("javax.net.ssl.keyStorePassword", sslConfig.getKeyStorePassword());
+        System.setProperty("javax.net.ssl.trustStore", sslConfig.getKeyStorePath());
+        System.setProperty("javax.net.ssl.trustStorePassword", sslConfig.getKeyStorePassword());        this.host = host;
         this.puerto = puerto;
     }
 

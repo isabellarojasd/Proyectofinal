@@ -5,6 +5,8 @@ import org.example.exportar.ExportarInventarioCSV;
 import org.example.exportar.IExportarInventario;
 import org.example.modelo.Producto;
 import org.example.protocolo.Respuesta;
+import org.example.configuracon.IConfigReader;
+import org.example.configuracon.PropertiesManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -42,8 +44,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
             setContentPane(panelInventario);
         }
 
-        // 1. Inicializamos el servicio apuntando al servidor SSL
-        this.servicioCliente = new ServicioCliente("localhost", 8443);
+        IConfigReader configReader = new PropertiesManager("config.properties");
+        this.servicioCliente = new ServicioCliente("localhost", configReader.getInt("tcp.port"));
 
         configurarTabla();
         cargarProductosServidor(); // Carga inicial
