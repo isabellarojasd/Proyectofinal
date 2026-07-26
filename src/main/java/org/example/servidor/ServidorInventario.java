@@ -1,4 +1,8 @@
 package org.example.servidor;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,10 +18,11 @@ public class ServidorInventario implements IServidorInventario{
 
     @Override
     public void iniciarServidor() {
-        try(ServerSocket servidor = new ServerSocket(puerto)){
+        SSLServerSocketFactory factory = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+        try(SSLServerSocket servidor = (SSLServerSocket) factory.createServerSocket(puerto)){
             System.out.println("El servido essta escuchando el puerto: " + puerto);
             while (true){
-                Socket cliente = servidor.accept();
+                SSLSocket cliente = (SSLSocket) servidor.accept();
                 ControladorClientes controlador = new ControladorClientes(cliente, despachador);
                 Thread thread = new Thread(controlador);
                 thread.start();

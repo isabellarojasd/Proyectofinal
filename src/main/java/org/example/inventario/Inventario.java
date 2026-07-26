@@ -74,8 +74,10 @@ public class Inventario {
     public void eliminarProducto(int id) {
         if (!productos.stream().anyMatch(p -> p.getId() == id)) {
             throw new ProductoNoEncontradoException("No existe el producto con el id: " + id + "Intentelo de nuevo");
+        }
+        productos.removeIf(p -> p.getId() == id);
 
-        }   }
+    }
     public void editarProducto(int id, String nombre, String descripcion, double precio, int cantidadDisponible) {
         List<Producto> resultado = productos.stream()
                 .filter(producto -> producto.getId() == id)

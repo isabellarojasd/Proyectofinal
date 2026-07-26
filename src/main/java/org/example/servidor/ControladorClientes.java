@@ -2,17 +2,19 @@ package org.example.servidor;
 import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
 
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+
 public class ControladorClientes implements Runnable{
 
-    private Socket socket;
+    private SSLSocket socket;
     private DespachadorPeticion despachador;
 
-    public ControladorClientes(Socket socket, DespachadorPeticion despachador) {
+    public ControladorClientes(SSLSocket socket, DespachadorPeticion despachador) {
         this.socket = socket;
         this.despachador = despachador;
     }
@@ -27,6 +29,12 @@ public class ControladorClientes implements Runnable{
             objectSalida.writeObject(respuesta);
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ocurrio un error al intentar conectar" + e.getMessage());
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Error al cerrar la conexión" + e.getMessage());
+            }
         }
 
 
