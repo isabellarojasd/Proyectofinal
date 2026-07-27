@@ -36,6 +36,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
     private JButton btnExportarCSV;
 
     private JTable tblProductos;
+    private JLabel abNombre;
+    private JLabel abDescripcion;
+    private JLabel abPrecio;
+    private JLabel abStock;
 
     public ManejoInventario() {
         super("Gestión de Inventario", 800, 600);
