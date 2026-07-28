@@ -9,16 +9,33 @@ import org.example.protocolo.Respuesta;
 import java.util.List;
 import org.example.auditoria.IAuditor;
 
-
+/**
+ * Traduce las peticiones recibidas del cliente en operaciones concretas
+ * sobre el inventario, y arma la respuesta correspondiente.
+ * Centraliza el manejo de excepciones para que ninguna operación fallida
+ * detenga la conexión con el cliente.
+ *
+ * @author Isabella Duque Estrada
+ */
 public class DespachadorPeticion {
+    /**
+     * Inventario sobre el cual se ejecutan las operaciones solicitadas.
+     */
+
     private Inventario inventario;
     private IAuditor auditor;
 
+    /**
+     * Crea un despachador asociado a un inventario específico.
+     *
+     * @param inventario el inventario que se va a gestionar
+     */
     public DespachadorPeticion(Inventario inventario){
 
         this.inventario = inventario;
     }
 
+<<<<<<< HEAD
     public DespachadorPeticion(Inventario inventario, IAuditor auditor){
         this.inventario = inventario;
         this.auditor = auditor;
@@ -35,6 +52,18 @@ public class DespachadorPeticion {
     }
 
     public Respuesta procesar (Peticion peticion, String ipCliente) {
+=======
+    /**
+     * Procesa una petición del cliente, ejecuta la operación indicada por
+     * su tipo, y devuelve la respuesta correspondiente. Si la operación
+     * lanza una excepción de negocio, se captura y se traduce en una
+     * respuesta de error, sin propagar la excepción hacia el llamador.
+     *
+     * @param peticion la petición enviada por el cliente
+     * @return la respuesta con el resultado de la operación
+     */
+    public Respuesta procesar (Peticion peticion) {
+>>>>>>> 6b2b575d524324d7076944e1bc2d028a97fc9272
         switch (peticion.getTipo()) {
             case AGREGAR:
                 try {

@@ -61,15 +61,10 @@ public class Inventario {
     }
 
     /**
-     * Modifica la información de un producto existente.
+     * Elimina un producto del inventario según su id.
      *
-     * @param id Identificador del producto.
-     * @param nombre Nuevo nombre del producto.
-     * @param descripcion Nueva descripción del producto.
-     * @param precio Nuevo precio del producto.
-     * @param cantidadDisponible Nueva cantidad disponible.
-     * @throws ProductoNoEncontradoException Si el producto no existe.
-     * @throws DatoInvalidoException Si alguno de los datos ingresados no es válido.
+     * @param id el identificador del producto a eliminar
+     * @throws ProductoNoEncontradoException si no existe un producto con ese id
      */
     public void eliminarProducto(int id) {
         if (!productos.stream().anyMatch(p -> p.getId() == id)) {
@@ -78,6 +73,18 @@ public class Inventario {
         productos.removeIf(p -> p.getId() == id);
 
     }
+    /**
+     * Edita los datos de un producto existente.
+     *
+     * @param id el identificador del producto a editar
+     * @param nombre el nuevo nombre
+     * @param descripcion la nueva descripción
+     * @param precio el nuevo precio
+     * @param cantidadDisponible la nueva cantidad disponible
+     * @throws ProductoNoEncontradoException si no existe un producto con ese id
+     * @throws DatoInvalidoException si los nuevos datos no son válidos
+     */
+
     public void editarProducto(int id, String nombre, String descripcion, double precio, int cantidadDisponible) {
         List<Producto> resultado = productos.stream()
                 .filter(producto -> producto.getId() == id)
