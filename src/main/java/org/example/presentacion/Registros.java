@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * Ventana para la visualización de los registros de auditoría.
- * Aplica HERENCIA desde VentaBase e INTERFAZ mediante INavegación.
  */
 public class Registros extends VentaBase implements INavegación {
 
@@ -144,21 +143,33 @@ public class Registros extends VentaBase implements INavegación {
         inicio.abrir();
     }
 
+    /**
+     * Este metodo devuelve el panel principal de la ventana
+     */
     @Override
     public JPanel getPanelPrincipal() {
         return this.panelRegistro;
     }
 
+    /**
+     * Este metodo muestra la ventana de registros
+     */
     @Override
     public void abrir() {
         this.setVisible(true);
     }
 
+    /**
+     * Este metodo cierra la ventana de registros
+     */
     @Override
     public void cerrar() {
         this.dispose();
     }
 
+    /**
+     * Este metodo limpia el formulario aunque en esta ventana no es necesario realizar ninguna accion
+     */
     @Override
     public void limpiarFormulario() {
     }

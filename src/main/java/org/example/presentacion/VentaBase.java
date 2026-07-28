@@ -26,7 +26,6 @@ public abstract class VentaBase extends JFrame {
 
     /**
      * Método abstracto que obliga a cada clase hija a indicar cuál es su JPanel principal
-     * @return El JPanel de la interfaz gráfica.
      */
     public abstract JPanel getPanelPrincipal();
 }
