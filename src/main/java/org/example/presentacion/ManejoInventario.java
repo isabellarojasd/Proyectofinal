@@ -22,6 +22,9 @@ public class ManejoInventario extends VentaBase implements INavegación {
     // Instancia del servicio cliente (Host: localhost, Puerto SSL: 8443)
     private ServicioCliente servicioCliente;
 
+    // Guarda el ID del producto actualmente seleccionado en la tabla (para Editar)
+    private Integer idSeleccionado = null;
+
     private JPanel panelInventario;
     private JTextField txtBusqueda;
     private JTextField txtNombre;
@@ -41,6 +44,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
     private JLabel abPrecio;
     private JLabel abStock;
     private JButton btnRegresar;
+    private JTextField txtId;
+    private JLabel abId;
 
     public ManejoInventario() {
         super("Gestión de Inventario", 800, 600);
@@ -79,12 +84,47 @@ public class ManejoInventario extends VentaBase implements INavegación {
         if (btnAgregar != null) {
             btnAgregar.addActionListener(e -> accionAgregar());
         }
+        if (btnEditar != null) {
+            btnEditar.addActionListener(e -> accionEditar());
+        }
         if (btnEliminar != null) {
             btnEliminar.addActionListener(e -> accionEliminar());
         }
         if (btnRegresar != null) {
             btnRegresar.addActionListener(e -> accionRegresar());
         }
+
+        // Al hacer clic en una fila de la tabla, se carga el producto en el formulario
+        if (tblProductos != null) {
+            tblProductos.getSelectionModel().addListSelectionListener(e -> {
+                if (!e.getValueIsAdjusting()) {
+                    cargarSeleccionEnFormulario();
+                }
+            });
+        }
+    }
+
+    /**
+     * Toma la fila seleccionada en la tabla y llena el formulario con sus datos,
+     * guardando el ID para poder usarlo luego al editar.
+     */
+    private void cargarSeleccionEnFormulario() {
+        if (tblProductos == null) return;
+
+        int fila = tblProductos.getSelectedRow();
+        if (fila < 0) {
+            idSeleccionado = null;
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+        Object valorId = modelo.getValueAt(fila, 0);
+        idSeleccionado = (valorId != null) ? Integer.parseInt(valorId.toString()) : null;
+
+        if (txtNombre != null) txtNombre.setText(String.valueOf(modelo.getValueAt(fila, 1)));
+        if (txtDescrpcion != null) txtDescrpcion.setText(String.valueOf(modelo.getValueAt(fila, 2)));
+        if (txtPrecio != null) txtPrecio.setText(String.valueOf(modelo.getValueAt(fila, 3)));
+        if (txtStock != null) txtStock.setText(String.valueOf(modelo.getValueAt(fila, 4)));
     }
 
     /**
@@ -177,6 +217,40 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
+    /**
+     * Edita el producto seleccionado en la tabla con los nuevos valores del formulario.
+     * Requiere haber hecho clic antes en una fila de la tabla (para tener el ID).
+     */
+    private void accionEditar() {
+        if (idSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Selecciona un producto de la tabla para poder editarlo.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            String nombre = txtNombre.getText().trim();
+            String desc = txtDescrpcion.getText().trim();
+            double precio = Double.parseDouble(txtPrecio.getText().trim());
+            int cantidad = Integer.parseInt(txtStock.getText().trim());
+
+            Producto actualizado = new Producto(nombre, desc, precio, cantidad, idSeleccionado);
+
+            Respuesta respuesta = servicioCliente.actualizarProducto(actualizado);
+            if (respuesta != null && respuesta.isExito()) {
+                JOptionPane.showMessageDialog(this, "Producto editado con éxito");
+                limpiarFormulario();
+                idSeleccionado = null;
+                cargarProductosServidor();
+            } else if (respuesta != null) {
+                JOptionPane.showMessageDialog(this, respuesta.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Asegúrate de ingresar valores numéricos válidos en Precio y Stock.", "Datos Inválidos", JOptionPane.WARNING_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error SSL al editar: " + e.getMessage(), "Error de Conexión", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void accionEliminar() {
         String criterio = txtBusqueda != null ? txtBusqueda.getText().trim() : "";
         if (criterio.isEmpty()) {
@@ -191,6 +265,7 @@ public class ManejoInventario extends VentaBase implements INavegación {
                 if (respuesta != null && respuesta.isExito()) {
                     JOptionPane.showMessageDialog(this, "Producto eliminado correctamente");
                     limpiarFormulario();
+                    idSeleccionado = null;
                     cargarProductosServidor();
                 } else if (respuesta != null) {
                     JOptionPane.showMessageDialog(this, respuesta.getMensaje(), "Error", JOptionPane.ERROR_MESSAGE);

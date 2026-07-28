@@ -7,6 +7,7 @@
     </constraints>
     <properties>
       <background color="-16711423"/>
+      <foreground color="-394241"/>
     </properties>
     <border type="none"/>
     <children>
@@ -175,6 +176,27 @@
         </constraints>
         <properties>
           <text value="Regresar"/>
+        </properties>
+      </component>
+      <component id="9206a" class="javax.swing.JTextField" binding="txtId">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-10986915"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="ad41d" class="javax.swing.JLabel" binding="abId">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-394241"/>
+          <foreground color="-394241"/>
+          <text value="ID"/>
         </properties>
       </component>
     </children>

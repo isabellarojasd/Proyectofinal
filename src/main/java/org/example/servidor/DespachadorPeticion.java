@@ -7,19 +7,39 @@ import org.example.modelo.Producto;
 import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
 import java.util.List;
+import org.example.auditoria.IAuditor;
 
 
 public class DespachadorPeticion {
     private Inventario inventario;
+    private IAuditor auditor;
 
     public DespachadorPeticion(Inventario inventario){
+
         this.inventario = inventario;
     }
-    public Respuesta procesar (Peticion peticion) {
+
+    public DespachadorPeticion(Inventario inventario, IAuditor auditor){
+        this.inventario = inventario;
+        this.auditor = auditor;
+    }
+
+    private void auditar(String operacion, String ip, String recurso) {
+        if (auditor != null) {
+            auditor.registrar(operacion, ip, recurso);
+        }
+    }
+
+    public Respuesta procesar(Peticion peticion) {
+        return procesar(peticion, "desconocida");
+    }
+
+    public Respuesta procesar (Peticion peticion, String ipCliente) {
         switch (peticion.getTipo()) {
             case AGREGAR:
                 try {
                     inventario.agregarProducto(peticion.getProducto());
+                    auditar("AGREGAR", ipCliente, peticion.getProducto().getNombre());
                     return new Respuesta(true, "Agregado con exito", null);
                 } catch (DatoInvalidoException e) {
                     return new Respuesta(false, e.getMessage(), null);
@@ -28,6 +48,7 @@ public class DespachadorPeticion {
                 try {
                     int id = Integer.parseInt(peticion.getCriterioBusqueda());
                     inventario.eliminarProducto(id);
+                    auditar("ELIMINAR", ipCliente, "ID " + id);
                     return new Respuesta(true, "Producto eliminado exitosamente", null);
                 } catch (ProductoNoEncontradoException e) {
                     return new Respuesta(false, e.getMessage(), null);
@@ -39,6 +60,7 @@ public class DespachadorPeticion {
                     int id = Integer.parseInt(peticion.getCriterioBusqueda());
                     Producto p = peticion.getProducto();
                     inventario.editarProducto(id, p.getNombre(), p.getDescripcion(), p.getPrecio(), p.getCantidadDisponible());
+                    auditar("ELIMINAR", ipCliente, "ID " + id);
                     return new Respuesta(true, "Producto actualizado con exito", null);
                 } catch (DatoInvalidoException | ProductoNoEncontradoException e) {
                     return new Respuesta(false, e.getMessage(), null);
