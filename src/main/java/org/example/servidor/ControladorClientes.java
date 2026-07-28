@@ -49,11 +49,13 @@ public class ControladorClientes implements Runnable{
     @Override
     public void run() {
         try {
+            ObjectOutputStream objectSalida = new ObjectOutputStream(socket.getOutputStream());
+            objectSalida.flush();
             ObjectInputStream objectEntrada = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream objectSalida = new ObjectOutputStream(socket.getOutputStream()) ;
             Peticion peticion = (Peticion) objectEntrada.readObject();
             Respuesta respuesta = despachador.procesar(peticion);
             objectSalida.writeObject(respuesta);
+            objectSalida.flush();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ocurrio un error al intentar conectar" + e.getMessage());
         } finally {
