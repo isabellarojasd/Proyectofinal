@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class ManejoInventario extends VentaBase implements INavegación {
 
-    // Instancia del servicio cliente (Host: localhost, Puerto SSL: 8443)
     private ServicioCliente servicioCliente;
 
     private JPanel panelInventario;
@@ -50,10 +49,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
 
         IConfigReader configReader = new PropertiesManager("config.properties");
-        this.servicioCliente = new ServicioCliente("localhost", configReader.getInt("tcp.port"));
+        this.servicioCliente = new ServicioCliente( configReader.getString("servidor.host"), configReader.getInt("tcp.port"));
 
         configurarTabla();
-        cargarProductosServidor(); // Carga inicial
+        cargarProductosServidor();
 
         inicializarEventos();
     }
