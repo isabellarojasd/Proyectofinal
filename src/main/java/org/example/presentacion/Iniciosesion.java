@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * PANTALLA PRINCIPAL / MENÚ DE SELECCIÓN
- * Aplica HERENCIA desde VentaBase e INTERFAZ mediante INavegación.
+ * Esta clase representa la ventana principal del sistema
+ * Permite al usuario seleccionar la opcion que desea abrir y acceder a las diferentes pantallas de la aplicacion
  */
 public class Iniciosesion extends VentaBase implements INavegación {
 
@@ -20,14 +20,14 @@ public class Iniciosesion extends VentaBase implements INavegación {
      */
     public Iniciosesion() {
         // Llama al constructor PADRE (VentaBase): super(Título, Ancho, Alto)
-        super("Sistema de Gestión - Menú Principal", 500, 350);
+        super("Menú Principal", 500, 350);
 
-        // Se asigna el panel diseñado visualmente
+
         if (panelInicio != null) {
             setContentPane(panelInicio);
         }
 
-        // --- ACCIÓN DEL BOTÓN ABRIR ---
+
         if (btnAbrir != null) {
             btnAbrir.addActionListener(new ActionListener() {
                 @Override
@@ -39,19 +39,18 @@ public class Iniciosesion extends VentaBase implements INavegación {
     }
 
     /**
-     * Lee la opción elegida en el JComboBox y abre la pantalla correspondiente.
+     * Lee la opción elegida en el JComboBox y abre la pantalla correspondiente
      */
     private void ejecutarOpcionSeleccionada() {
         if (cbOpciones != null && cbOpciones.getSelectedItem() != null) {
             String opcion = cbOpciones.getSelectedItem().toString();
 
-            // Evalúa la opción elegida en el ComboBox
+
             if (opcion.equalsIgnoreCase("Inventario") || opcion.contains("Inventario")) {
                 ManejoInventario inventario = new ManejoInventario();
                 inventario.abrir();
                 this.cerrar();
             } else if (opcion.equalsIgnoreCase("Registros") || opcion.contains("Registros")) {
-                // Aquí va la llamada a tu pantalla de registros/auditoría
                 Registros registros = new Registros();
                 registros.abrir();
                 this.cerrar();
@@ -61,23 +60,34 @@ public class Iniciosesion extends VentaBase implements INavegación {
         }
     }
 
-    // --- MÉTODOS OBLIGATORIOS IMPLEMENTADOS (DE VentaBase Y INavegación) ---
 
+    /**
+     * Este metodo devuelve el panel principal de la ventana
+     */
     @Override
     public JPanel getPanelPrincipal() {
         return this.panelInicio;
     }
 
+    /**
+     * Este metodo muestra la ventana al usuario
+     */
     @Override
     public void abrir() {
         this.setVisible(true);
     }
 
+    /**
+     * Este metodo cierra la ventana actual
+     */
     @Override
     public void cerrar() {
         this.dispose();
     }
 
+    /**
+     * Este metodo reinicia la seleccion del ComboBox dejando la primera opcion seleccionada
+     */
     @Override
     public void limpiarFormulario() {
         if (cbOpciones != null && cbOpciones.getItemCount() > 0) {
