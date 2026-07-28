@@ -62,6 +62,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
         inicializarEventos();
     }
 
+    /**
+     * Este metodo configura la tabla donde se van a mostrar todos los productos del inventario
+     * Aqui se crean las columnas y despues se asigna el modelo a la tabla para poder mostrar la informacion
+     */
     private void configurarTabla() {
         String[] columnas = {"ID", "Nombre", "Descripción", "Precio", "Stock"};
         DefaultTableModel modelo = new DefaultTableModel(null, columnas);
@@ -71,7 +75,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
     }
 
     /**
-     * Registra los eventos de clic en los botones de la interfaz.
+     *  Este metodo inicializa todos los eventos de los botones
+     *  Cada boton ejecuta una accion diferente como buscar agregar editar eliminar exportar o regresar
      */
     private void inicializarEventos() {
         if (btnExportarCSV != null) {
@@ -127,7 +132,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
     }
 
     /**
-     * Estas son las acciones de los botones
+     * Este metodo exporta el inventario a un archivo CSV
+     * Primero obtiene los productos del servidor despues permite elegir donde guardar el archivo y finalmente realiza la exportacion
      */
 
     private void accionExportarCSV() {
@@ -173,6 +179,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
+    /**
+     * Este metodo busca un producto usando el texto ingresado por el usuario
+     * Si el campo esta vacio carga nuevamente todo el inventario
+     */
     private void accionBuscar() {
         String criterio = txtBusqueda != null ? txtBusqueda.getText().trim() : "";
         if (criterio.isEmpty()) {
@@ -191,6 +201,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
+    /**
+     * Este metodo agrega un nuevo producto al inventario
+     * Toma los datos del formulario crea el producto y lo envia al servidor
+     */
     private void accionAgregar() {
         try {
             String nombre = txtNombre.getText().trim();
@@ -217,8 +231,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
     }
 
     /**
-     * Edita el producto seleccionado en la tabla con los nuevos valores del formulario.
-     * Requiere haber hecho clic antes en una fila de la tabla (para tener el ID).
+     * Edita el producto seleccionado en la tabla con los nuevos valores del formulario
+     * Requiere haber hecho clic antes en una fila de la tabla
      */
     private void accionEditar() {
         if (idSeleccionado == null) {
@@ -250,6 +264,10 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
+    /**
+     * Este metodo elimina un producto del inventario
+     * Primero solicita una confirmacion y despues envia la solicitud al servidor para eliminar el producto seleccionado
+     */
     private void accionEliminar() {
         String criterio = txtBusqueda != null ? txtBusqueda.getText().trim() : "";
         if (criterio.isEmpty()) {
@@ -276,7 +294,8 @@ public class ManejoInventario extends VentaBase implements INavegación {
     }
 
     /**
-     * Usa ServicioCliente para pedir el inventario al servidor vía SSL.
+     * Este metodo obtiene todos los productos almacenados en el servidor
+     * Despues de recibir la informacion actualiza la tabla con los datos mas recientes
      */
     public void cargarProductosServidor() {
         try {
@@ -298,7 +317,7 @@ public class ManejoInventario extends VentaBase implements INavegación {
         if (tblProductos == null) return;
 
         DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
-        modelo.setRowCount(0); // Limpia filas viejas
+        modelo.setRowCount(0);
 
         if (productos != null) {
             for (Producto p : productos) {
@@ -308,6 +327,9 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
     }
 
+    /**
+     * Este metodo devuelve el panel principal de la ventana del inventario
+     */
     private void accionRegresar() {
         this.cerrar();
         Iniciosesion inicio = new Iniciosesion();
