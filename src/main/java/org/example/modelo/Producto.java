@@ -1,5 +1,8 @@
 package org.example.modelo;
 import lombok.*;
+import org.example.servidor.ServidorInventario;
+
+import java.io.Serializable;
 
 /**
  * Representa un producto dentro del inventario
@@ -13,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Producto {
+public class Producto implements Serializable {
 
     /**
      * Nombre del producto
