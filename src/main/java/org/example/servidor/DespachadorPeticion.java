@@ -7,7 +7,6 @@ import org.example.modelo.Producto;
 import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
 import java.util.List;
-import org.example.auditoria.IAuditor;
 
 /**
  * Traduce las peticiones recibidas del cliente en operaciones concretas
@@ -23,7 +22,6 @@ public class DespachadorPeticion {
      */
 
     private Inventario inventario;
-    private IAuditor auditor;
 
     /**
      * Crea un despachador asociado a un inventario específico.
@@ -31,28 +29,9 @@ public class DespachadorPeticion {
      * @param inventario el inventario que se va a gestionar
      */
     public DespachadorPeticion(Inventario inventario){
-
         this.inventario = inventario;
     }
 
-<<<<<<< HEAD
-    public DespachadorPeticion(Inventario inventario, IAuditor auditor){
-        this.inventario = inventario;
-        this.auditor = auditor;
-    }
-
-    private void auditar(String operacion, String ip, String recurso) {
-        if (auditor != null) {
-            auditor.registrar(operacion, ip, recurso);
-        }
-    }
-
-    public Respuesta procesar(Peticion peticion) {
-        return procesar(peticion, "desconocida");
-    }
-
-    public Respuesta procesar (Peticion peticion, String ipCliente) {
-=======
     /**
      * Procesa una petición del cliente, ejecuta la operación indicada por
      * su tipo, y devuelve la respuesta correspondiente. Si la operación
@@ -63,12 +42,10 @@ public class DespachadorPeticion {
      * @return la respuesta con el resultado de la operación
      */
     public Respuesta procesar (Peticion peticion) {
->>>>>>> 6b2b575d524324d7076944e1bc2d028a97fc9272
         switch (peticion.getTipo()) {
             case AGREGAR:
                 try {
                     inventario.agregarProducto(peticion.getProducto());
-                    auditar("AGREGAR", ipCliente, peticion.getProducto().getNombre());
                     return new Respuesta(true, "Agregado con exito", null);
                 } catch (DatoInvalidoException e) {
                     return new Respuesta(false, e.getMessage(), null);
@@ -77,7 +54,6 @@ public class DespachadorPeticion {
                 try {
                     int id = Integer.parseInt(peticion.getCriterioBusqueda());
                     inventario.eliminarProducto(id);
-                    auditar("ELIMINAR", ipCliente, "ID " + id);
                     return new Respuesta(true, "Producto eliminado exitosamente", null);
                 } catch (ProductoNoEncontradoException e) {
                     return new Respuesta(false, e.getMessage(), null);
@@ -89,7 +65,6 @@ public class DespachadorPeticion {
                     int id = Integer.parseInt(peticion.getCriterioBusqueda());
                     Producto p = peticion.getProducto();
                     inventario.editarProducto(id, p.getNombre(), p.getDescripcion(), p.getPrecio(), p.getCantidadDisponible());
-                    auditar("ELIMINAR", ipCliente, "ID " + id);
                     return new Respuesta(true, "Producto actualizado con exito", null);
                 } catch (DatoInvalidoException | ProductoNoEncontradoException e) {
                     return new Respuesta(false, e.getMessage(), null);

@@ -8,10 +8,7 @@ import org.example.inventario.Inventario;
 import org.example.servidor.DespachadorPeticion;
 import org.example.servidor.ServidorInventario;
 
-<<<<<<< HEAD
 
-
-=======
 /**
  * Punto de entrada del lado servidor del sistema de gestión de inventario.
  * Carga la configuración SSL desde el archivo de propiedades, configura
@@ -21,7 +18,7 @@ import org.example.servidor.ServidorInventario;
  *
  * @author Isabella Duque Estrada
  */
->>>>>>> 6b2b575d524324d7076944e1bc2d028a97fc9272
+
     public class MainServidor {
 
     /**
