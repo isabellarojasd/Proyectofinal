@@ -8,13 +8,39 @@ import org.example.protocolo.Peticion;
 import org.example.protocolo.Respuesta;
 import java.util.List;
 
-
+/**
+ * Traduce las peticiones recibidas del cliente en operaciones concretas
+ * sobre el inventario, y arma la respuesta correspondiente.
+ * Centraliza el manejo de excepciones para que ninguna operación fallida
+ * detenga la conexión con el cliente.
+ *
+ * @author Isabella Duque Estrada
+ */
 public class DespachadorPeticion {
+    /**
+     * Inventario sobre el cual se ejecutan las operaciones solicitadas.
+     */
+
     private Inventario inventario;
 
+    /**
+     * Crea un despachador asociado a un inventario específico.
+     *
+     * @param inventario el inventario que se va a gestionar
+     */
     public DespachadorPeticion(Inventario inventario){
         this.inventario = inventario;
     }
+
+    /**
+     * Procesa una petición del cliente, ejecuta la operación indicada por
+     * su tipo, y devuelve la respuesta correspondiente. Si la operación
+     * lanza una excepción de negocio, se captura y se traduce en una
+     * respuesta de error, sin propagar la excepción hacia el llamador.
+     *
+     * @param peticion la petición enviada por el cliente
+     * @return la respuesta con el resultado de la operación
+     */
     public Respuesta procesar (Peticion peticion) {
         switch (peticion.getTipo()) {
             case AGREGAR:
