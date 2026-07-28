@@ -40,6 +40,7 @@ public class ManejoInventario extends VentaBase implements INavegación {
     private JLabel abDescripcion;
     private JLabel abPrecio;
     private JLabel abStock;
+    private JButton btnRegresar;
 
     public ManejoInventario() {
         super("Gestión de Inventario", 800, 600);
@@ -80,6 +81,9 @@ public class ManejoInventario extends VentaBase implements INavegación {
         }
         if (btnEliminar != null) {
             btnEliminar.addActionListener(e -> accionEliminar());
+        }
+        if (btnRegresar != null) {
+            btnRegresar.addActionListener(e -> accionRegresar());
         }
     }
 
@@ -228,6 +232,12 @@ public class ManejoInventario extends VentaBase implements INavegación {
                 modelo.addRow(fila);
             }
         }
+    }
+
+    private void accionRegresar() {
+        this.cerrar();
+        Iniciosesion inicio = new Iniciosesion();
+        inicio.abrir();
     }
 
     /**

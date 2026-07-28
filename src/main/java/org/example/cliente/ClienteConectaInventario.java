@@ -19,9 +19,10 @@ public class ClienteConectaInventario {
     private final String host;
     private final int puerto;
 
+
     /**
      * Crea una nueva instancia de conexión hacia el servidor.
-     * @param host dirección del servidor (ej. "localhost")
+     * @param host dirección del servidor
      * @param puerto puerto en el que escucha el servidor
      */
     public ClienteConectaInventario(String host, int puerto) {
@@ -29,7 +30,8 @@ public class ClienteConectaInventario {
         System.setProperty("javax.net.ssl.keyStore", sslConfig.getKeyStorePath());
         System.setProperty("javax.net.ssl.keyStorePassword", sslConfig.getKeyStorePassword());
         System.setProperty("javax.net.ssl.trustStore", sslConfig.getKeyStorePath());
-        System.setProperty("javax.net.ssl.trustStorePassword", sslConfig.getKeyStorePassword());        this.host = host;
+        System.setProperty("javax.net.ssl.trustStorePassword", sslConfig.getKeyStorePassword());
+        this.host = host;
         this.puerto = puerto;
     }
 
