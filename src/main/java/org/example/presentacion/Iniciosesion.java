@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
  */
 public class Iniciosesion extends VentaBase implements INavegación {
 
-    // Tus componentes exactos declarados en el .form
     private JComboBox cbOpciones;
     private JButton btnAbrir;
     private JPanel panelInicio;
